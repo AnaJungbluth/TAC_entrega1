@@ -26,7 +26,7 @@ import lombok.Setter;
 public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long pessoaid;
 
     @Column(nullable = false)
     private String nome;
@@ -37,6 +37,6 @@ public class Pessoa {
     @Column(nullable = false)
     private String senha;
 
-    @OneToMany(mappedBy = "pessoa")
-    private List<Gateway> gateways;
+    // @OneToMany(mappedBy = "pessoa")
+    // private List<Gateway> gateways;
 }

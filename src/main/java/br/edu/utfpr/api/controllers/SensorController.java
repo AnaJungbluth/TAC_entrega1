@@ -1,10 +1,10 @@
 package br.edu.utfpr.api.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-import br.edu.utfpr.api.dto.PessoaDTO;
+import br.edu.utfpr.api.dto.SensorDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
-import br.edu.utfpr.api.model.Pessoa;
-import br.edu.utfpr.api.service.PessoaService;
+import br.edu.utfpr.api.model.Sensor;
+import br.edu.utfpr.api.service.SensorService;
 
 import java.util.List;
 
@@ -20,31 +20,30 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/pessoa")
-public class PessoaController {
+@RequestMapping("/sensor")
+public class SensorController {
     @Autowired
-        private PessoaService pessoaService;
+        private SensorService sensorService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = pessoaService.getByid(id);
+        var person = sensorService.getByid(id);
     
-        return person.isPresent() 
-            ? ResponseEntity.ok().body(person.get())
-            : ResponseEntity.notFound().build();
+        return person.isPresent() ? ResponseEntity.ok().body(person.get())
+        : ResponseEntity.notFound().build();
     }
 
     @GetMapping
-    public List<Pessoa> getAll(){
-        return pessoaService.getAll();
+    public List<Sensor> getAll(){
+        return sensorService.getAll();
     }
 
     @PostMapping    
-    public ResponseEntity<Object> create(@RequestBody PessoaDTO dto){
+    public ResponseEntity<Object> create(@RequestBody SensorDTO dto){
         try{
-            var res = pessoaService.create(dto);
+            var res = sensorService.create(dto);
 
-            //seta o status para 201 (CREATED)  e retorna o objeto Pessoa em JSON 
+            //seta o status para 201 (CREATED)  e retorna o objeto Sensor em JSON 
             return ResponseEntity.status(HttpStatus.CREATED).body(res);
         }catch(Exception ex){
             // seta o status para 400 (bad request) e devolve a mensagem da exceção lançada.
@@ -53,9 +52,9 @@ public class PessoaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody PessoaDTO dto){
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody SensorDTO dto){
         try {
-            return ResponseEntity.ok().body(pessoaService.update(id, dto));
+            return ResponseEntity.ok().body(sensorService.update(id, dto));
         } catch (NoteFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }catch(Exception ex){
@@ -66,7 +65,7 @@ public class PessoaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") Long id){
         try {
-            pessoaService.delete(id);
+            sensorService.delete(id);
             return ResponseEntity.ok().build();
         } catch (NoteFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

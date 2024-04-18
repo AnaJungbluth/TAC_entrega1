@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 public record GatewayDTO(
     @NotBlank @Length(min=2) String nome,
     @NotBlank @Length(min=2) String descricao,
-    @NotNull @Min(1) Long pessoaID
+    @NotNull @Min(1) Long pessoaid
 ) {
 
 }

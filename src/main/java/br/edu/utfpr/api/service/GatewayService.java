@@ -26,7 +26,7 @@ public class GatewayService {
         var gateway = new Gateway();
         BeanUtils.copyProperties(dto, gateway);
     
-        var pessoa = pessoaRepository.findById(dto.pessoaid()); // Corrigido para usar getPessoasid()
+        var pessoa = pessoaRepository.findById(dto.pessoaid()); 
         if (pessoa.isPresent()) {
             gateway.setPessoa(pessoa.get());
         } else {
@@ -55,6 +55,12 @@ public class GatewayService {
         var gateway = res.get();
         gateway.setNome((dto.nome()));
         gateway.setDescricao(dto.descricao());
+        var pessoa = pessoaRepository.findById(dto.pessoaid()); // Corrigido para usar getPessoasid()
+        if (pessoa.isPresent()) {
+            gateway.setPessoa(pessoa.get());
+        } else {
+            throw new NoteFoundException("Pessoa não existe");
+        }
 
         return gatewayRepository.save(gateway);
         

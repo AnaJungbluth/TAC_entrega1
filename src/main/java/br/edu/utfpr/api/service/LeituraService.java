@@ -2,6 +2,8 @@ package br.edu.utfpr.api.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +13,31 @@ import br.edu.utfpr.api.dto.LeituraDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
 import br.edu.utfpr.api.model.Leitura;
 import br.edu.utfpr.api.repository.LeituraRepository;
+import br.edu.utfpr.api.repository.SensorRepository;
+
 
 @Service
 public class LeituraService {
     @Autowired
     private LeituraRepository leituraRepository;
 
-    public Leitura create(LeituraDTO dto){
+    @Autowired
+    private SensorRepository sensorRepository;
+
+    public Leitura create(LeituraDTO dto) throws NoteFoundException{
         var leitura = new Leitura();
         BeanUtils.copyProperties(dto, leitura);
-        
+
+        var sensor = sensorRepository.findById(dto.sensorid()); 
+        if (sensor.isPresent()) {
+            leitura.setSensor(sensor.get());
+        } else {
+            throw new NoteFoundException("Sensor não existe");
+        }
+
+        // Definir a data e hora atual
+        leitura.setDataHora(LocalDateTime.now());
+                
         //Persistir no banco de dados
         return leituraRepository.save(leitura);
     }
@@ -42,6 +59,12 @@ public class LeituraService {
 
         var leitura = res.get();
         leitura.setValor((dto.valor()));
+        var sensor = sensorRepository.findById(dto.sensorid()); 
+        if (sensor.isPresent()) {
+            leitura.setSensor(sensor.get());
+        } else {
+            throw new NoteFoundException("Pessoa não existe");
+        }
 
         return leituraRepository.save(leitura);
         
@@ -55,8 +78,9 @@ public class LeituraService {
         }
 
         leituraRepository.delete(res.get());
-
     }
 
-
+    public List<Leitura> findLeituraBySensorid(long sensorid){
+        return leituraRepository.findBySensorSensorid(sensorid);
+    }
 }

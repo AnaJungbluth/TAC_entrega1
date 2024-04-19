@@ -1,6 +1,6 @@
 package br.edu.utfpr.api.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,13 +27,13 @@ import lombok.Setter;
 public class Leitura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long leituraID;
+    private long leituraid;
 
     @Column(nullable = false)
     private String valor;
 
     @Column(nullable = false)
-    private Date dataHora;
+    private LocalDateTime dataHora;
 
     @ManyToOne
     @JoinColumn(name = "sensor_id")

@@ -11,6 +11,8 @@ import br.edu.utfpr.api.dto.DispositivoDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
 import br.edu.utfpr.api.model.Dispositivo;
 import br.edu.utfpr.api.repository.DispositivoRepository;
+import br.edu.utfpr.api.repository.GatewayRepository;
+
 
 @Service
 public class DispositivoService {
@@ -18,9 +20,19 @@ public class DispositivoService {
     @Autowired
     private DispositivoRepository dispositivoRepository;
 
-    public Dispositivo create(DispositivoDTO dto){
+    @Autowired
+    private GatewayRepository gatewayRepository;
+
+    public Dispositivo create(DispositivoDTO dto) throws NoteFoundException{
         var dispositivo = new Dispositivo();
         BeanUtils.copyProperties(dto, dispositivo);
+
+        var gateway = gatewayRepository.findById(dto.gatewayid()); 
+        if (gateway.isPresent()) {
+            dispositivo.setGateway(gateway.get());
+        } else {
+            throw new NoteFoundException("Gateway não existe");
+        }
         
         //Persistir no banco de dados
         return dispositivoRepository.save(dispositivo);
@@ -45,6 +57,13 @@ public class DispositivoService {
         dispositivo.setNome((dto.nome()));
         dispositivo.setDescricao(dto.descricao());
         dispositivo.setLocalizacao(dto.localizacao());
+        var gateway = gatewayRepository.findById(dto.gatewayid()); 
+        if (gateway.isPresent()) {
+            dispositivo.setGateway(gateway.get());
+        } else {
+            throw new NoteFoundException("Gateway não existe");
+        }
+        
 
         return dispositivoRepository.save(dispositivo);
         
@@ -59,6 +78,10 @@ public class DispositivoService {
 
         dispositivoRepository.delete(res.get());
 
+    }
+
+    public List<Dispositivo> findDispositivoByGatewayid(long gatewayid){
+        return dispositivoRepository.findByGatewayGatewayid(gatewayid);
     }
 
 }

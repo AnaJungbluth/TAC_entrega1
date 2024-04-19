@@ -11,6 +11,7 @@ import br.edu.utfpr.api.dto.AtuadorDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
 import br.edu.utfpr.api.model.Atuador;
 import br.edu.utfpr.api.repository.AtuadorRepository;
+import br.edu.utfpr.api.repository.DispositivoRepository;
 
 @Service
 public class AtuadorService {
@@ -18,9 +19,19 @@ public class AtuadorService {
     @Autowired
     private AtuadorRepository atuadorRepository;
 
-    public Atuador create(AtuadorDTO dto){
+    @Autowired
+    private DispositivoRepository dispositivoRepository;
+
+    public Atuador create(AtuadorDTO dto) throws NoteFoundException{
         var atuador = new Atuador();
         BeanUtils.copyProperties(dto, atuador);
+
+        var dispositivo = dispositivoRepository.findById(dto.dispositivoid()); // Corrigido para usar getPessoasid()
+        if (dispositivo.isPresent()) {
+            atuador.setDispositivo(dispositivo.get());
+        } else {
+            throw new NoteFoundException("Dispositivo não existe");
+        }
         
         //Persistir no banco de dados
         return atuadorRepository.save(atuador);
@@ -43,6 +54,12 @@ public class AtuadorService {
 
         var atuador = res.get();
         atuador.setNome((dto.nome()));
+        var dispositivo = dispositivoRepository.findById(dto.dispositivoid()); // Corrigido para usar getPessoasid()
+        if (dispositivo.isPresent()) {
+            atuador.setDispositivo(dispositivo.get());
+        } else {
+            throw new NoteFoundException("Dispositivo não existe");
+        }
 
         return atuadorRepository.save(atuador);
         
@@ -57,6 +74,10 @@ public class AtuadorService {
 
         atuadorRepository.delete(res.get());
 
+    }
+
+    public List<Atuador> findAtuadorByDispositivoid(long dispositivoid){
+        return atuadorRepository.findByDispositivoDispositivoid(dispositivoid);
     }
 
 }

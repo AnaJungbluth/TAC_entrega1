@@ -28,7 +28,7 @@ import lombok.Setter;
 public class Sensor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long sensorID;
+    private long sensorid;
 
     @Column(nullable = false)
     private String nome;
@@ -36,8 +36,8 @@ public class Sensor {
     @Column(nullable = false)
     private String tipo;
 
-    @OneToMany(mappedBy = "sensor")
-    private List<Leitura> leituras;
+    // @OneToMany(mappedBy = "sensor")
+    // private List<Leitura> leituras;
 
     @ManyToOne
     @JoinColumn(name="dispositivo_id")

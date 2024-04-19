@@ -28,7 +28,7 @@ import lombok.Setter;
 public class Gateway {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long gatewayID;
+    private long gatewayid;
 
     @Column(nullable = false)
     private String nome;
@@ -36,8 +36,8 @@ public class Gateway {
     @Column(nullable = false)
     private String descricao;
 
-    @OneToMany(mappedBy = "gateway")
-    private List<Dispositivo> dispositivos;
+    // @OneToMany(mappedBy = "gateway")
+    // private List<Dispositivo> dispositivos;
 
     @ManyToOne
     @JoinColumn(name="pessoa_id")

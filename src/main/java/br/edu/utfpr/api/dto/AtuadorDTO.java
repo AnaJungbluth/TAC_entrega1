@@ -8,5 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record AtuadorDTO(
 @NotBlank @Length(min = 2) String nome, 
-@NotNull @Min(1) Long dispositivoID) {
+@NotNull @Min(1) Long dispositivoid) 
+{
 }

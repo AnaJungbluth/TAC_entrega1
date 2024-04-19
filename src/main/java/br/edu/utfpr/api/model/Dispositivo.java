@@ -29,7 +29,7 @@ import lombok.Setter;
 public class Dispositivo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long dispositivoid;
 
     @Column(nullable = false)
     private String nome;
@@ -40,11 +40,11 @@ public class Dispositivo {
     @Column(nullable = false)
     private String localizacao;
 
-    @OneToMany(mappedBy = "dispositivo")
-    private List<Atuador> atuadores;
+    // @OneToMany(mappedBy = "dispositivo")
+    // private List<Atuador> atuadores;
 
-    @OneToMany(mappedBy = "dispositivo")
-    private List<Sensor> sensores;
+    // @OneToMany(mappedBy = "dispositivo")
+    // private List<Sensor> sensores;
 
     @ManyToOne
     @JoinColumn(name="gateway_id")

@@ -5,6 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 public record LeituraDTO(
     @NotNull String valor,
-    @NotNull @Min(1) Long sensorID) {
-    
+    @NotNull @Min(1) Long sensorid) {
 }

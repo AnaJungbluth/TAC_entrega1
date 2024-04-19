@@ -9,6 +9,6 @@ import jakarta.validation.constraints.NotNull;
 public record SensorDTO(
     @NotBlank @Length(min = 2) String nome, 
     @NotBlank @Length(min = 2) String tipo, 
-     @NotNull @Min(1) Long dispositivoID) {
+     @NotNull @Min(1) Long dispositivoid) {
 
 }

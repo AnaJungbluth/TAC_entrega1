@@ -34,6 +34,10 @@ public class PessoaService {
         return pessoaRepository.findById(id);
     }
 
+    public Optional<Pessoa> findByEmail(String email) {
+        return pessoaRepository.findByEmail(email);
+    }
+
     public Pessoa update(Long id, PessoaDTO dto) throws NoteFoundException{
         var res = pessoaRepository.findById(id);
 

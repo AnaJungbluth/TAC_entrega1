@@ -30,13 +30,9 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Enable CORS and disable CSRF
         http = http.cors(withDefaults()).csrf(csrf -> csrf.disable());
-
-        // Set session management to stateless
         http = http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Set unauthorized requests exception handler
         http = http
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint(
@@ -46,17 +42,11 @@ public class WebSecurityConfig {
                                             ex.getMessage());
                                 }));
 
-        // Set permissions on endpoints
         http.authorizeHttpRequests(requests -> requests
-                // .requestMatchers("/api-docs/**").permitAll()
-                // .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                // .requestMatchers(HttpMethod.GET, "/index.html").permitAll()
-                // .requestMatchers(HttpMethod.GET, "/").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                 .requestMatchers(HttpMethod.POST, "/pessoa").permitAll()
                 .anyRequest().authenticated());
 
-        // Add JWT token filter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -73,18 +63,10 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Método ignora URL específicas
-    // @Bean // Ignora URL's específicas
-    // public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
-    // return web -> web.ignoring().requestMatchers("/auth");
-    // }
-
-    // Used by Spring Security if CORS is enabled.
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        // config.setAllowCredentials(true);
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");

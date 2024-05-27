@@ -5,9 +5,9 @@ POST {{URL}}
 Content-Type: application/json
 
 {
-    "nome": "aastes",
-    "email": "aas@htmail",
-    "senha": 233 
+    "nome": "aas",
+    "email": "aa@htmail",
+    "senha": "233" 
 }
 
 ### Obter todas as pessoas

@@ -26,11 +26,12 @@ public class DispositivoController {
         private DispositivoService dispositivoService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = dispositivoService.getByid(id);
+    public ResponseEntity<Object> GetById(@PathVariable("id") long id) {
+        var dispositivo = dispositivoService.getById(id);
     
-        return person.isPresent() ? ResponseEntity.ok().body(person.get())
-        : ResponseEntity.notFound().build();
+        return dispositivo.isPresent()
+            ? ResponseEntity.ok().body(dispositivo.get())
+            : ResponseEntity.notFound().build();
     }
 
     @GetMapping

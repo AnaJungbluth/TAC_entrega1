@@ -12,5 +12,4 @@ public record DispositivoDTO(
     @NotBlank @Length(min=2) String localizacao,
     @NotNull @Min(1) Long gatewayid
 ) {
-
 }

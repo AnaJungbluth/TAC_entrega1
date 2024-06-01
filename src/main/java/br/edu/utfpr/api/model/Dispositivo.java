@@ -2,9 +2,13 @@ package br.edu.utfpr.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,13 +44,17 @@ public class Dispositivo {
     @Column(nullable = false)
     private String localizacao;
 
-    // @OneToMany(mappedBy = "dispositivo")
-    // private List<Atuador> atuadores;
+    @OneToMany(mappedBy = "dispositivo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Atuador> atuadores;
 
-    // @OneToMany(mappedBy = "dispositivo")
-    // private List<Sensor> sensores;
+    @OneToMany(mappedBy = "dispositivo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Sensor> sensores;
 
     @ManyToOne
-    @JoinColumn(name="gateway_id")
+    @JoinColumn(name = "gateway_id")
+    @JsonBackReference
     private Gateway gateway;
+    
 }

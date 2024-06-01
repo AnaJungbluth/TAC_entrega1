@@ -9,10 +9,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class AuthDTO {
-    @NotBlank(message = "O e-mail não pode estar vazio.")
-    public String useremail;
+    @NotBlank(message = "O nome de usuário não pode estar vazio.")
+    public String username;
 
     @NotBlank(message = "A senha não pode estar vazia.")
-    public String usersenha;
+    public String password;
 }
 

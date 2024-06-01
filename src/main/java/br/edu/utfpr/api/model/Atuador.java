@@ -1,5 +1,7 @@
 package br.edu.utfpr.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class Atuador {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name="dispositivo_id")
+    @JoinColumn(name = "dispositivo_id")
+    @JsonBackReference
     private Dispositivo dispositivo;
 }

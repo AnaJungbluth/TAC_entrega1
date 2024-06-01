@@ -23,54 +23,52 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/atuador")
 public class AtuadorController {
     @Autowired
-        private AtuadorService atuadorService;
+    private AtuadorService atuadorService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = atuadorService.getByid(id);
-    
-        return person.isPresent() ? ResponseEntity.ok().body(person.get())
-        : ResponseEntity.notFound().build();
+    public ResponseEntity<Object> GetById(@PathVariable("id") long id) {
+       var atuador = atuadorService.getById(id);
+
+       return atuador.isPresent()
+            ? ResponseEntity.ok().body(atuador.get())
+            : ResponseEntity.notFound().build();
     }
 
     @GetMapping
-    public List<Atuador> getAll(){
+    public List<Atuador> getAll() {
         return atuadorService.getAll();
     }
 
-    @PostMapping    
-    public ResponseEntity<Object> create(@RequestBody AtuadorDTO dto){
-        try{
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody AtuadorDTO dto) {
+        try {
             var res = atuadorService.create(dto);
-
-            //seta o status para 201 (CREATED)  e retorna o objeto Pessoa em JSON 
             return ResponseEntity.status(HttpStatus.CREATED).body(res);
-        }catch(Exception ex){
-            // seta o status para 400 (bad request) e devolve a mensagem da exceção lançada.
-            return ResponseEntity.badRequest().body(ex.getMessage());       
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody AtuadorDTO dto){
+    public ResponseEntity<Object> update(@PathVariable("id") long id, @RequestBody AtuadorDTO dto) {
         try {
             return ResponseEntity.ok().body(atuadorService.update(id, dto));
-        } catch (NoteFoundException ex) {
+        }catch(NoteFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch(Exception ex){
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }catch(Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") Long id){
+    public ResponseEntity<Object> delete(@PathVariable("id") long id){
         try {
             atuadorService.delete(id);
             return ResponseEntity.ok().build();
-        } catch (NoteFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch(Exception ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch(NoteFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

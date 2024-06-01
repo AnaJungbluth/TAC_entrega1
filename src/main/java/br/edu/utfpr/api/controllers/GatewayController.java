@@ -5,7 +5,6 @@ import br.edu.utfpr.api.dto.GatewayDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
 import br.edu.utfpr.api.model.Gateway;
 import br.edu.utfpr.api.service.GatewayService;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class GatewayController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = gatewayService.getByid(id);
+        var person = gatewayService.getById(id);
     
         return person.isPresent() ? ResponseEntity.ok().body(person.get())
         : ResponseEntity.notFound().build();

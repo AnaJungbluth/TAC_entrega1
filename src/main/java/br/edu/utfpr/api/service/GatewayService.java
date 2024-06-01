@@ -25,60 +25,49 @@ public class GatewayService {
     public Gateway create(GatewayDTO dto) throws NoteFoundException {
         var gateway = new Gateway();
         BeanUtils.copyProperties(dto, gateway);
-    
-        var pessoa = pessoaRepository.findById(dto.pessoaid()); 
-        if (pessoa.isPresent()) {
+
+        var pessoa = pessoaRepository.findById(dto.pessoaid());
+        if(pessoa.isPresent())
             gateway.setPessoa(pessoa.get());
-        } else {
+        else
             throw new NoteFoundException("Pessoa não existe");
-        }
-        
-        // Persistir no banco de dados
+
+        // Persistir no DB
         return gatewayRepository.save(gateway);
     }
 
-    public List<Gateway> getAll(){
+    public List<Gateway> getAll() {
         return gatewayRepository.findAll();
     }
 
-    public Optional<Gateway> getByid(long id){
+    public Optional<Gateway> getById(long id) {
         return gatewayRepository.findById(id);
     }
 
-    public Gateway update(Long id, GatewayDTO dto) throws NoteFoundException{
+    public Gateway update(long id, GatewayDTO dto) throws NoteFoundException{
         var res = gatewayRepository.findById(id);
 
         if(res.isEmpty()){
-            throw new NoteFoundException("Gateway " + id + " não existe.");
+            throw new NoteFoundException("Gateway " + id + " não existe");
         }
 
         var gateway = res.get();
-        gateway.setNome((dto.nome()));
+        gateway.setNome(dto.nome());
         gateway.setDescricao(dto.descricao());
-        var pessoa = pessoaRepository.findById(dto.pessoaid()); // Corrigido para usar getPessoasid()
-        if (pessoa.isPresent()) {
-            gateway.setPessoa(pessoa.get());
-        } else {
-            throw new NoteFoundException("Pessoa não existe");
-        }
 
         return gatewayRepository.save(gateway);
-        
     }
 
-    public void delete(long id) throws NoteFoundException{
+    public void delete(long id) throws NoteFoundException {
         var res = gatewayRepository.findById(id);
 
         if(res.isEmpty()){
-            throw new NoteFoundException("Gateway " + id + " não existe.");
+            throw new NoteFoundException("Gateway " + id + " não existe");
         }
-
         gatewayRepository.delete(res.get());
-
     }
 
     public List<Gateway> findGatewayByPessoaid(long pessoaid){
         return gatewayRepository.findByPessoaPessoaid(pessoaid);
     }
-
 }

@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.edu.utfpr.api.dto.SensorDTO;
 import br.edu.utfpr.api.exceptions.NoteFoundException;
 import br.edu.utfpr.api.model.Sensor;
 import br.edu.utfpr.api.repository.SensorRepository;
+import jakarta.transaction.Transactional;
 import br.edu.utfpr.api.repository.DispositivoRepository;
 
 
@@ -22,60 +24,62 @@ public class SensorService {
 
     @Autowired
     private DispositivoRepository dispositivoRepository;
-
-    public Sensor create(SensorDTO dto) throws NoteFoundException{
+    /**
+     * 
+     * Inserir uma pessoa no DB
+     * @return
+     * @throws NotFoundException 
+     */
+    public Sensor create(SensorDTO dto) throws NoteFoundException {
         var sensor = new Sensor();
         BeanUtils.copyProperties(dto, sensor);
 
-        var dispositivo = dispositivoRepository.findById(dto.dispositivoid()); // Corrigido para usar getPessoasid()
-        if (dispositivo.isPresent()) {
+        var dispositivo = dispositivoRepository.findById(dto.dispositivoid());
+        if(dispositivo.isPresent())
             sensor.setDispositivo(dispositivo.get());
-        } else {
+        else
             throw new NoteFoundException("Dispositivo não existe");
-        }
-        
-        //Persistir no banco de dados
+
+        // Persistir no DB
         return sensorRepository.save(sensor);
     }
 
-    public List<Sensor> getAll(){
+    public List<Sensor> getAll() {
         return sensorRepository.findAll();
     }
 
-    public Optional<Sensor> getByid(long id){
+    public Optional<Sensor> getById(long id) {
         return sensorRepository.findById(id);
     }
 
-    public Sensor update(Long id, SensorDTO dto) throws NoteFoundException{
+    public Sensor update(long id, SensorDTO dto) throws NoteFoundException{
         var res = sensorRepository.findById(id);
 
         if(res.isEmpty()){
-            throw new NoteFoundException("Sensor " + id + " não existe.");
+            throw new NoteFoundException("Pessoa " + id + " não existe");
         }
 
         var sensor = res.get();
-        sensor.setNome((dto.nome()));
+        sensor.setNome(dto.nome());
         sensor.setTipo(dto.tipo());
-        var dispositivo = dispositivoRepository.findById(dto.dispositivoid()); // Corrigido para usar getPessoasid()
-        if (dispositivo.isPresent()) {
-            sensor.setDispositivo(dispositivo.get());
-        } else {
-            throw new NoteFoundException("Dispositivo não existe");
-        }
 
         return sensorRepository.save(sensor);
-        
     }
 
-    public void delete(long id) throws NoteFoundException{
+    @Transactional
+    public void delete(long id) throws NoteFoundException {
         var res = sensorRepository.findById(id);
 
         if(res.isEmpty()){
-            throw new NoteFoundException("Sensor " + id + " não existe.");
+            throw new NoteFoundException("Sensor " + id + " não existe");
+        }
+        Sensor sensor = res.get();
+        
+        if (sensor.getDispositivo() != null) {
+            sensor.getDispositivo().getSensores().remove(sensor);
         }
 
-        sensorRepository.delete(res.get());
-
+        sensorRepository.delete(sensor);
     }
 
     public List<Sensor> findSensorByDispositivoid(long dispositivoid){

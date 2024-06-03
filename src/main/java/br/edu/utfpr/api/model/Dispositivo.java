@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -57,4 +58,8 @@ public class Dispositivo {
     @JsonBackReference
     private Gateway gateway;
     
+    @JsonProperty("gateway_id")
+    public Long getGatewayId() {
+        return gateway != null ? gateway.getGatewayid() : null;
+    }
 }

@@ -27,10 +27,11 @@ public class SensorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = sensorService.getById(id);
+        var sensor = sensorService.getById(id);
     
-        return person.isPresent() ? ResponseEntity.ok().body(person.get())
-        : ResponseEntity.notFound().build();
+        return sensor.isPresent() 
+            ? ResponseEntity.ok().body(sensor.get())
+            : ResponseEntity.notFound().build();
     }
 
     @GetMapping

@@ -2,6 +2,9 @@ package br.edu.utfpr.api.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,5 +40,11 @@ public class Leitura {
 
     @ManyToOne
     @JoinColumn(name = "sensor_id")
+    @JsonBackReference
     private Sensor sensor;
+
+    @JsonProperty("sensor_id")
+    public Long getSensorId() {
+        return sensor != null ? sensor.getSensorid() : null;
+    }
 }

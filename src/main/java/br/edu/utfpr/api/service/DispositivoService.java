@@ -90,9 +90,9 @@ public class DispositivoService {
         return dispositivoRepository.findByGatewayGatewayid(gatewayid);
     }
 
-    // public List<Dispositivo> findByUserId(Long userId) {
-    //     return dispositivoRepository.findByGatewayPessoaid(userId);
-    // }
+    public List<Dispositivo> findByUserId(Long userId) {
+        return dispositivoRepository.findByGatewayPessoaid(userId);
+    }
 
 }
 

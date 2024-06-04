@@ -26,15 +26,16 @@ public class GatewayController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id){
-        var person = gatewayService.getById(id);
+        var gateway = gatewayService.getById(id);
     
-        return person.isPresent() ? ResponseEntity.ok().body(person.get())
+        return gateway.isPresent() ? ResponseEntity.ok().body(gateway.get())
         : ResponseEntity.notFound().build();
     }
 
     @GetMapping
-    public List<Gateway> getAll(){
-        return gatewayService.getAll();
+    public ResponseEntity<List<Gateway>> getAll() {
+        List<Gateway> gateways = gatewayService.getAll();
+        return ResponseEntity.ok(gateways);
     }
 
     @PostMapping    
@@ -71,5 +72,11 @@ public class GatewayController {
         }catch(Exception ex){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Gateway>> getByUserId(@PathVariable("userId") long userId) {
+        List<Gateway> gateways = gatewayService.findGatewayByPessoaid(userId);
+        return ResponseEntity.ok(gateways);
     }
 }

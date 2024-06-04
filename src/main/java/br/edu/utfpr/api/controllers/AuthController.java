@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,9 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+     @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -36,9 +40,9 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<Object> auth(@Valid @RequestBody AuthDTO authDTO) {
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(authDTO.username);
-            if (userDetails == null) {
-                throw new UsernameNotFoundException("User not found");
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authDTO.getUsername());
+            if (userDetails == null || !passwordEncoder.matches(authDTO.getPassword(), userDetails.getPassword())) {
+                throw new BadCredentialsException("Usuário não encontrado ou senha incorreta.");
             }
 
             CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;

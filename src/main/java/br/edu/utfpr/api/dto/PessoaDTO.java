@@ -8,4 +8,8 @@ public record PessoaDTO(
     @NotBlank @Length(min = 2) String nome, 
     @NotBlank @Length(min = 2) String email, 
     @NotBlank @Length(min = 2) String senha) {
+
+        public String getSenha() {
+            return senha;
+        }
 }
